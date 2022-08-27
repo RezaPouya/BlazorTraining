@@ -1,6 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿
+@inherits MainMenu
+@inject RandomService RandomService
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">BlazorServer</a>
+        <a class="navbar-brand" href="">CRUD Test App</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -24,16 +27,23 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
         </div>
+        <div class="nav-item px-3">
+            <a class="nav-link" target="_blank" href="https://github.com/RezaPouya">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> My Github
+            </a>
+        </div>
+
+        <div class="nav-item px-3">
+            <a class="nav-link" target="_blank" href="#">
+               @RandomService.RandomGuid 
+            </a>
+        </div>
+        <div class="nav-item px-3">
+            <a class="nav-link" target="_blank" href="#">
+               @RandomSrv.RandomGuid 
+            </a>
+        </div>
     </nav>
 </div>
 
-@code {
-    private bool collapseNavMenu = true;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
