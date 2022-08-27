@@ -32,6 +32,21 @@
 <button class="btn btn-danger" @onclick="Focus">Focus!</button>
 
 
+<br />
+<br />
+<hr />
+
+<h3>Please focus - Tutorial 6 </h3>
+<hr />
+<h3>Give me random int </h3>
+
+<div>
+    The random number is: <span id="radnomNumberSpan"></span>
+</div>
+<button class="btn btn-info" onclick="generateRandomNumberFromJ(1000)">Generate Random Number</button>
+<button class="btn btn-success" @onclick="GenerateRandom">Generate Random Number From Method Instance </button>
+
+
 
 @code {
 
@@ -39,13 +54,13 @@
 
     ElementReference InputToFocus;
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            JsRuntime.InvokeVoidAsync(identifier: "focusOnElement", InputToFocus).GetAwaiter().GetResult();
-        }
-    }
+    //protected override void OnAfterRender(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+    //        JsRuntime.InvokeVoidAsync(identifier: "focusOnElement", InputToFocus).GetAwaiter().GetResult();
+    //    }
+    //}
 
     async Task ShowAlert()
     {
@@ -61,5 +76,25 @@
     async Task Focus()
     {
         await JsRuntime.InvokeVoidAsync(identifier: "focusOnElement", InputToFocus);
+    }
+
+
+    [JSInvokable]
+    public static Task<int> GenerateRandomNumber(int maxValue)
+    {
+        return Task.FromResult(new Random().Next(maxValue));
+    }
+
+
+    [JSInvokable]
+    public Task<int> MethodFromInstantiateClass(int maxValue)
+    {
+        return Task.FromResult(new Random().Next(maxValue));
+    }
+
+    public async Task GenerateRandom()
+    {
+        var response = await JsRuntime.InvokeAsync<string>(identifier: "giveMeRandomInt", 100,
+        DotNetObjectReference.Create(this));
     }
 }
