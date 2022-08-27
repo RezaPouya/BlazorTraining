@@ -1,0 +1,65 @@
+﻿@page "/interop"
+@inject IJSRuntime JsRuntime
+@layout MainLayout
+<h1>JS Interop</h1>
+
+<h3>Create alert</h3>
+
+<button class="btn btn-success" @onclick="ShowAlert">Show alert </button>
+<br />
+<br />
+<hr />
+
+<h3>Ask me a question</h3>
+
+<input @bind="questionTxt" />
+
+<button class="btn btn-success" @onclick="AskQuestion">Ask Question </button>
+
+<div>
+    The answer was: <span id="answerSpan"></span>
+</div>
+
+
+<br />
+<br />
+<hr />
+
+<h3>Please focus</h3>
+
+<input @ref="InputToFocus" width="90" />
+
+<button class="btn btn-danger" @onclick="Focus">Focus!</button>
+
+
+
+@code {
+
+    string questionTxt = string.Empty;
+
+    ElementReference InputToFocus;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            JsRuntime.InvokeVoidAsync(identifier: "focusOnElement", InputToFocus).GetAwaiter().GetResult();
+        }
+    }
+
+    async Task ShowAlert()
+    {
+        await JsRuntime.InvokeVoidAsync(identifier: "createAlert");
+    }
+
+    async Task AskQuestion()
+    {
+        var response = await JsRuntime.InvokeAsync<string>(identifier: "createQuestion", questionTxt);
+        await JsRuntime.InvokeVoidAsync(identifier: "setElementTextBytId", "answerSpan", response);
+    }
+
+    async Task Focus()
+    {
+        await JsRuntime.InvokeVoidAsync(identifier: "focusOnElement", InputToFocus);
+    }
+}
