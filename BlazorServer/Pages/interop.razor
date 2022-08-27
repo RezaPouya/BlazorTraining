@@ -1,4 +1,5 @@
 ﻿@page "/interop"
+@using BlazorServer.Helpers
 @inject IJSRuntime JsRuntime
 @layout MainLayout
 <h1>JS Interop</h1>
@@ -86,15 +87,11 @@
     }
 
 
-    [JSInvokable]
-    public Task<int> MethodFromInstantiateClass(int maxValue)
-    {
-        return Task.FromResult(new Random().Next(maxValue));
-    }
+
 
     public async Task GenerateRandom()
     {
         var response = await JsRuntime.InvokeAsync<string>(identifier: "giveMeRandomInt", 100,
-        DotNetObjectReference.Create(this));
+        DotNetObjectReference.Create(new RandomHelper()));
     }
 }
